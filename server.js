@@ -37,7 +37,9 @@ app.get('/home', (_, res) => {
 })
 
 app.get('/available', (_, res) => {
-  BooksStatus.show_all_books_status(res);
+  BooksStatus.show_all_books_status()
+  .then((data) => console.log(data))
+  .catch((_) => res.send('No book instance found'));
 })
 
 app.get('/books', (_, res) => {
@@ -53,6 +55,7 @@ app.get('/authors', (_, res) => {
 app.get('/book_dtls', (req, res) => {
   BookDetails.show_book_dtls(res, req.query.id);
 })
+
 
 app.post('/newbook', (req, res) => {
     const familyName = req.body.familyName;

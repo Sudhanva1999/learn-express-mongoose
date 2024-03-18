@@ -7,7 +7,7 @@ var AuthorSchema = new Schema(
     first_name: {type: String, required: true, maxLength: 100},
     family_name: {type: String, required: true, maxLength: 100},
     date_of_birth: {type: Date},
-    date_of_death: {type: Date},
+    date_of_death: {type: Date}
   }
 );
 
@@ -28,7 +28,19 @@ AuthorSchema
 });
 
 // Virtual for author's lifespan
-AuthorSchema.virtual('lifespan').get(function() {});
+AuthorSchema.virtual('lifespan').get(function() {
+  var lifespan = '';
+  if (this.date_of_birth && this.date_of_death) {
+    lifespan = this.date_of_birth.getFullYear().toString() + ' - ' + this.date_of_death.getFullYear().toString() ;
+  } else if(! this.date_of_birth) {
+    lifespan = '- ' + this.date_of_death.getFullYear().toString();
+  } else if(! this.date_of_death) {
+    lifespan = this.date_of_birth.getFullYear().toString()  + ' - ';
+  } else {
+    lifespan = '-';
+  }
+  return lifespan;
+});
 
 //Export model
 module.exports = mongoose.model('Author', AuthorSchema);
